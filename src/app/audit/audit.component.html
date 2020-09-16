@@ -1,0 +1,95 @@
+<h1>Hi {{currentUser.firstName}}!</h1>
+<p>You're logged in with Angular 8!!</p>
+
+
+<div class="form-group row">
+ <div class="col-md-1 p-0">
+     <label class="font-weight-bold">Select Date: </label>
+  
+ </div>
+ <div class="col-md-4">
+    <select class="form-control form-control-sm" [formControl]="dateFormatCntrl" #dateFormatCtrl (change)="onSelectDate($event.target.value)">
+        <option [value]="0">--Select--</option>
+         <option *ngFor="let option of formatArray" [value]="option.id">{{option.dateValue}}</option>
+     </select>
+ </div>
+
+ <div class="col-md-6">   
+    <div class="form-group row">
+        <b>Converted Date</b>: 
+        <span *ngIf="show24Date">
+            {{hour24Date}}
+         </span>
+       <span *ngIf="show12Date">
+            {{hour12Date}}
+       </span>
+    </div>   
+
+    
+ </div>
+</div>
+<div class="row">
+    <div class="form-group col-md-4 d-flex">
+        <label class="pr-3">Search:</label>
+          <input type="text" class="form-control" placeholder="Search" [(ngModel)]="searchText">
+       </div>
+</div>
+
+
+
+
+
+<div class="data-table">
+
+    <table class="table bg-white table-bordered table-striped" id="example">
+        <thead>
+            <tr>
+                <th> ID
+                    <span class="float-right">   <i  (click)="onSortAudits($event,'_id',audits)" class="my-icon fa fa-chevron-up"></i> </span>
+                  
+                </th>
+                <th> User Name
+                    <span class="float-right"> <i (click)="onSortAudits($event,'_id',audits)" class="my-icon fa fa-chevron-up"></i> </span>
+                    
+                </th>
+                <th> Login Time
+                    <span class="float-right">  <i  (click)="onSortAudits($event,'user',audits)" class="my-icon fa fa-chevron-up"></i> </span>
+                   
+                </th>
+                <th> LogOut Time
+                    <span class="float-right">  <i  (click)="onSortAudits($event,'loginTime',audits)"
+                        class="my-icon fa fa-chevron-up"></i> </span>
+                   
+                </th>
+                <th> IP
+                    <span class="float-right">  <i  (click)="onSortAudits($event,'ip',audits)" class="my-icon fa fa-chevron-up"></i> </span>
+                   
+                </th>
+            </tr>
+        </thead>
+        <tbody *ngFor="let audit of audits | filter: searchText | paginate: { id: 'listing_pagination',
+        itemsPerPage: 20,
+        currentPage: page,
+        totalItems: totalRec }">
+            <td>{{audit._id}}</td>
+            <td>{{audit.user}}</td>
+            <td>{{audit.loginTime}}</td>
+            <td>{{audit.logoutTime}}</td>
+            <td>{{audit.ip}}</td>
+        </tbody>
+    </table>
+    
+</div>
+
+
+<pagination-controls id="listing_pagination" maxSize="8" directionLinks="true" class="my-pagination"
+(pageChange)="page = $event">
+</pagination-controls>
+
+
+<style>
+    .data-table  {
+    max-height: 300px;
+    overflow: auto;
+}
+</style>
